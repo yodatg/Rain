@@ -7,14 +7,33 @@
 //
 
 #import "MTAppDelegate.h"
+#import "MTWeatherViewController.h"
+#import "MTForecastViewController.h"
+#import "MTLocationsViewController.h"
+
+@interface MTAppDelegate()
+
+@property (strong, nonatomic) IIViewDeckController *viewDeckController;
+
+@end
 
 @implementation MTAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    MTLocationsViewController *leftViewController = [[MTLocationsViewController alloc] initWithNibName:@"MTLocationsViewController" bundle:nil];
+    MTForecastViewController *rightViewController = [[MTForecastViewController alloc] initWithNibName:@"MTForecastViewController" bundle:nil];
+    MTWeatherViewController *centerViewController = [[MTWeatherViewController alloc] initWithNibName:@"MTWeatherViewController" bundle:nil];
+    // configure locations view controller
+    [leftViewController setDelegate:centerViewController];
+    
+    // initialise View Deck Controller
+    self.viewDeckController = [[IIViewDeckController alloc] initWithCenterViewController:centerViewController leftViewController:leftViewController rightViewController:rightViewController];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
+    self.window.rootViewController = self.viewDeckController;
     [self.window makeKeyAndVisible];
     return YES;
 }
